@@ -33,6 +33,23 @@ const PostManager = ({ token }) => {
       .catch((err) => console.error(err))
   }
 
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this post?')) {
+      fetch(`/api/posts/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then((res) => {
+          if (res.ok) {
+            setPosts((prev) => prev.filter((post) => post.id !== id))
+          } else {
+            console.error('Failed to delete post.')
+          }
+        })
+        .catch((err) => console.error(err))
+    }
+  }
+
   return (
     <div>
       <h2>Manage Posts</h2>
@@ -45,6 +62,7 @@ const PostManager = ({ token }) => {
             <button onClick={() => togglePublish(post.id)}>
               {post.published ? 'Unpublish' : 'Publish'}
             </button>
+            <button onClick={() => handleDelete(post.id)}>Delete</button>
             <a href={`/edit/${post.id}`}>Edit</a>
           </li>
         ))}
