@@ -5,6 +5,7 @@ import PostManager from './components/PostManager'
 import NewPost from './components/NewPost'
 import EditPost from './components/EditPost'
 import ProtectedRoute from './components/ProtectedRoute'
+import Register from './components/Register'
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token') || '')
@@ -29,6 +30,7 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Login setToken={setToken} />} />
+          <Route path='/register' element={<Register setToken={setToken} />} />
           <Route
             path='/manage'
             element={

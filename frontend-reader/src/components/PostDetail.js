@@ -5,6 +5,7 @@ const PostDetail = () => {
   const { id } = useParams()
   const [post, setPost] = useState(null)
   const [comment, setComment] = useState('')
+  const token = useState(localStorage.getItem('token'))
 
   useEffect(() => {
     fetch(`/api/posts/manage/${id}`)
@@ -17,7 +18,10 @@ const PostDetail = () => {
     e.preventDefault()
     fetch('/api/comments', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
       body: JSON.stringify({ content: comment, postId: parseInt(id) })
     })
       .then((res) => res.json())
@@ -53,15 +57,19 @@ const PostDetail = () => {
           <hr />
         </div>
       ))}
-      <form onSubmit={handleSubmit}>
-        <textarea
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          required
-          placeholder='Add a comment'
-        ></textarea>
-        <button type='submit'>Submit</button>
-      </form>
+      {token ? (
+        <form onSubmit={handleSubmit}>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            required
+            placeholder='Add a comment'
+          ></textarea>
+          <button type='submit'>Submit</button>
+        </form>
+      ) : (
+        <p>You must be logged in to add a comment.</p>
+      )}
       <Link to='/'>Go back home</Link>
     </div>
   )

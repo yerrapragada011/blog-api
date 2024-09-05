@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 
 const EditPost = ({ token }) => {
   const { id } = useParams()
@@ -90,6 +90,7 @@ const EditPost = ({ token }) => {
         <br />
         <button type='submit'>Update Post</button>
       </form>
+      <Link to='/manage'>Go back home</Link>
       <h3>Comments</h3>
       <ul>
         {comments.map((comment) => (

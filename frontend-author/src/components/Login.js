@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState('')
@@ -27,26 +27,29 @@ const Login = ({ setToken }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Author Login</h2>
-      <input
-        type='email'
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder='Email'
-        required
-      />
-      <br />
-      <input
-        type='password'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder='Password'
-        required
-      />
-      <br />
-      <button type='submit'>Login</button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <h2>Author Login</h2>
+        <input
+          type='email'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder='Email'
+          required
+        />
+        <br />
+        <input
+          type='password'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder='Password'
+          required
+        />
+        <br />
+        <button type='submit'>Login</button>
+      </form>
+      <Link to='/register'>Register</Link>
+    </div>
   )
 }
 
