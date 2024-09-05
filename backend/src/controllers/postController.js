@@ -1,4 +1,3 @@
-// src/controllers/postController.js
 const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
@@ -16,17 +15,48 @@ const getAllPosts = async (req, res) => {
   }
 }
 
+const getAllPostsForAuthor = async (req, res) => {
+  const authorId = req.user.userId
+
+  try {
+    const posts = await prisma.post.findMany({
+      where: { authorId },
+      include: { author: { select: { username: true } } },
+      orderBy: { createdAt: 'desc' }
+    })
+    res.json(posts)
+  } catch (error) {
+    res.status(500).json({ message: 'Server error.', error: error.message })
+  }
+}
+
 const getPostById = async (req, res) => {
   const { id } = req.params
 
   try {
-    const post = await prisma.post.findFirst({
-      where: { id: parseInt(id), published: true },
+    const postId = parseInt(id)
+
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId
+      },
       include: {
-        author: { select: { username: true } },
+        author: {
+          select: {
+            username: true
+          }
+        },
         comments: {
-          include: { author: { select: { username: true } } },
-          orderBy: { createdAt: 'asc' }
+          include: {
+            author: {
+              select: {
+                username: true
+              }
+            }
+          },
+          orderBy: {
+            createdAt: 'asc'
+          }
         }
       }
     })
@@ -116,6 +146,7 @@ const togglePublish = async (req, res) => {
 
 module.exports = {
   getAllPosts,
+  getAllPostsForAuthor,
   getPostById,
   createPost,
   updatePost,

@@ -4,11 +4,18 @@ const PostManager = ({ token }) => {
   const [posts, setPosts] = useState([])
 
   useEffect(() => {
-    fetch('/api/posts', {
+    fetch('/api/posts/manage', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => res.json())
-      .then((data) => setPosts(data))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setPosts(data)
+        } else {
+          setPosts([])
+          console.error('Unexpected response format:', data)
+        }
+      })
       .catch((err) => console.error(err))
   }, [token])
 

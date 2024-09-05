@@ -13,7 +13,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/posts', postRoutes)
 app.use('/api/comments', commentRoutes)
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 8000
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`)

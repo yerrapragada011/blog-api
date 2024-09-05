@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 const PostDetail = () => {
   const { id } = useParams()
@@ -7,7 +7,7 @@ const PostDetail = () => {
   const [comment, setComment] = useState('')
 
   useEffect(() => {
-    fetch(`/api/posts/${id}`)
+    fetch(`/api/posts/manage/${id}`)
       .then((res) => res.json())
       .then((data) => setPost(data))
       .catch((err) => console.error(err))
@@ -62,6 +62,7 @@ const PostDetail = () => {
         ></textarea>
         <button type='submit'>Submit</button>
       </form>
+      <Link to='/'>Go back home</Link>
     </div>
   )
 }
