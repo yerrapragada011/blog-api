@@ -5,7 +5,7 @@ const PostDetail = () => {
   const { id } = useParams()
   const [post, setPost] = useState(null)
   const [comment, setComment] = useState('')
-  const token = useState(localStorage.getItem('token'))
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
     fetch(`/api/posts/manage/${id}`)
@@ -22,15 +22,44 @@ const PostDetail = () => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ content: comment, postId: parseInt(id) })
+      body: JSON.stringify({
+        content: comment,
+        postId: parseInt(id),
+        authorId: token
+      })
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to add comment')
+        }
+        return res.json()
+      })
       .then((data) => {
         setPost((prev) => ({
           ...prev,
           comments: [...prev.comments, data]
         }))
         setComment('')
+      })
+      .catch((err) => console.error(err))
+  }
+
+  const handleDelete = (commentId) => {
+    fetch(`/api/posts/${id}/comments/${commentId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to delete comment')
+        }
+        setPost((prev) => ({
+          ...prev,
+          comments: prev.comments.filter((c) => c.id !== commentId)
+        }))
       })
       .catch((err) => console.error(err))
   }
@@ -54,6 +83,7 @@ const PostDetail = () => {
             By {c.author ? c.author.username : 'Anonymous'} on{' '}
             {new Date(c.createdAt).toLocaleDateString()}
           </p>
+          {token && <button onClick={() => handleDelete(c.id)}>Delete</button>}
           <hr />
         </div>
       ))}

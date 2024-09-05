@@ -3,7 +3,8 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 const addComment = async (req, res) => {
-  const { content, postId, authorId } = req.body
+  const { content, postId } = req.body
+  const authorId = req.authorId
 
   try {
     const post = await prisma.post.findFirst({
@@ -19,6 +20,13 @@ const addComment = async (req, res) => {
         content,
         postId,
         authorId: authorId || null
+      },
+      include: {
+        author: {
+          select: {
+            username: true
+          }
+        }
       }
     })
 
