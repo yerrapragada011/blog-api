@@ -27,7 +27,7 @@ router.delete('/:id', authenticate, authorize('ADMIN'), deletePost)
 router.patch('/:id/publish', authenticate, authorize('ADMIN'), togglePublish)
 
 router.post('/:postId/comments', authenticate, addComment)
-router.put('/comments/:id', authenticate, updateComment)
+router.put('/:postId/comments/:id', authenticate, updateComment)
 router.delete('/:postId/comments/:id', authenticate, deleteComment)
 
 module.exports = router

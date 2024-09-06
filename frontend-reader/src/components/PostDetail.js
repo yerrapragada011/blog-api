@@ -5,6 +5,9 @@ const PostDetail = ({ token, user }) => {
   const { id } = useParams()
   const [post, setPost] = useState(null)
   const [comment, setComment] = useState('')
+  const [editMode, setEditMode] = useState(false)
+  const [currentCommentId, setCurrentCommentId] = useState(null)
+  const [editCommentContent, setEditCommentContent] = useState('')
 
   useEffect(() => {
     fetch(`/api/posts/manage/${id}`)
@@ -66,6 +69,49 @@ const PostDetail = ({ token, user }) => {
       .catch((err) => console.error(err))
   }
 
+  const handleEdit = (commentId) => {
+    const commentToEdit = post.comments.find((c) => c.id === commentId)
+    if (commentToEdit) {
+      setEditMode(true)
+      setCurrentCommentId(commentId)
+      setEditCommentContent(commentToEdit.content)
+    }
+  }
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault()
+    fetch(`/api/posts/${id}/comments/${currentCommentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        content: editCommentContent
+      })
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to update comment')
+        }
+        return res.json()
+      })
+      .then(() => {
+        setPost((prev) => ({
+          ...prev,
+          comments: prev.comments.map((c) =>
+            c.id === currentCommentId
+              ? { ...c, content: editCommentContent }
+              : c
+          )
+        }))
+        setEditMode(false)
+        setEditCommentContent('')
+        setCurrentCommentId(null)
+      })
+      .catch((err) => console.error(err))
+  }
+
   if (!post) return <div>Loading...</div>
 
   return (
@@ -86,12 +132,26 @@ const PostDetail = ({ token, user }) => {
             {new Date(c.createdAt).toLocaleDateString()}
           </p>
           {user && user.id === c.authorId && (
-            <button onClick={() => handleDelete(c.id)}>Delete</button>
+            <>
+              <button onClick={() => handleEdit(c.id)}>Edit</button>
+              <button onClick={() => handleDelete(c.id)}>Delete</button>
+            </>
           )}
           <hr />
         </div>
       ))}
-      {token ? (
+      {editMode ? (
+        <form onSubmit={handleEditSubmit}>
+          <textarea
+            value={editCommentContent}
+            onChange={(e) => setEditCommentContent(e.target.value)}
+            required
+            placeholder='Edit your comment'
+          ></textarea>
+          <button type='submit'>Update</button>
+          <button onClick={() => setEditMode(false)}>Cancel</button>
+        </form>
+      ) : token ? (
         <form onSubmit={handleSubmit}>
           <textarea
             value={comment}
