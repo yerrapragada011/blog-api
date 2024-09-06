@@ -18,7 +18,10 @@ function App() {
       })
         .then((res) => res.json())
         .then((data) => setUser(data))
-        .catch((err) => console.error(err))
+        .catch((err) => {
+          console.error(err)
+          setUser(null)
+        })
     }
   }, [token])
 
@@ -44,7 +47,10 @@ function App() {
         )}
         <Routes>
           <Route path='/' element={<PostList />} />
-          <Route path='/posts/:id' element={<PostDetail token={token} />} />
+          <Route
+            path='/posts/:id'
+            element={<PostDetail token={token} user={user} />}
+          />
           <Route path='/login' element={<Login setToken={setToken} />} />
           <Route path='/register' element={<Register setToken={setToken} />} />
         </Routes>

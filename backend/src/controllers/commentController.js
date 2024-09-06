@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 const addComment = async (req, res) => {
   const { content, postId } = req.body
-  const authorId = req.user.userId
+  const authorId = req.user.id
 
   try {
     const post = await prisma.post.findFirst({
@@ -54,8 +54,25 @@ const updateComment = async (req, res) => {
 
 const deleteComment = async (req, res) => {
   const { id } = req.params
+  const userId = req.user.id
+  const userRole = req.user.role
 
   try {
+    const comment = await prisma.comment.findUnique({
+      where: { id: parseInt(id) },
+      select: { authorId: true }
+    })
+
+    if (!comment) {
+      return res.status(404).json({ message: 'Comment not found.' })
+    }
+
+    if (userRole !== 'ADMIN' && comment.authorId !== userId) {
+      return res
+        .status(403)
+        .json({ message: 'You can only delete your own comments.' })
+    }
+
     await prisma.comment.delete({
       where: { id: parseInt(id) }
     })

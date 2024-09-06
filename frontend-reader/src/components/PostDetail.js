@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 
-const PostDetail = () => {
+const PostDetail = ({ token, user }) => {
   const { id } = useParams()
   const [post, setPost] = useState(null)
   const [comment, setComment] = useState('')
-  const token = localStorage.getItem('token')
 
   useEffect(() => {
     fetch(`/api/posts/manage/${id}`)
@@ -25,7 +24,7 @@ const PostDetail = () => {
       body: JSON.stringify({
         content: comment,
         postId: parseInt(id),
-        authorId: token
+        authorId: user ? user.id : null
       })
     })
       .then((res) => {
@@ -56,6 +55,9 @@ const PostDetail = () => {
         if (!res.ok) {
           throw new Error('Failed to delete comment')
         }
+        return res.json()
+      })
+      .then(() => {
         setPost((prev) => ({
           ...prev,
           comments: prev.comments.filter((c) => c.id !== commentId)
@@ -83,7 +85,9 @@ const PostDetail = () => {
             By {c.author ? c.author.username : 'Anonymous'} on{' '}
             {new Date(c.createdAt).toLocaleDateString()}
           </p>
-          {token && <button onClick={() => handleDelete(c.id)}>Delete</button>}
+          {user && user.id === c.authorId && (
+            <button onClick={() => handleDelete(c.id)}>Delete</button>
+          )}
           <hr />
         </div>
       ))}

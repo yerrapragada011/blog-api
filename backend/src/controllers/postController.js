@@ -65,7 +65,12 @@ const getPostById = async (req, res) => {
       return res.status(404).json({ message: 'Post not found.' })
     }
 
-    res.json(post)
+    const commentsWithAuthorId = post.comments.map((comment) => ({
+      ...comment,
+      authorId: comment.authorId
+    }))
+
+    res.json({ ...post, comments: commentsWithAuthorId })
   } catch (error) {
     res.status(500).json({ message: 'Server error.', error: error.message })
   }
@@ -73,7 +78,7 @@ const getPostById = async (req, res) => {
 
 const createPost = async (req, res) => {
   const { title, content, published } = req.body
-  const authorId = req.user.userId
+  const authorId = req.user.id
 
   try {
     const post = await prisma.post.create({
