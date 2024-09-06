@@ -7,9 +7,10 @@ const EditPost = ({ token }) => {
   const [post, setPost] = useState({ title: '', content: '' })
   const [loading, setLoading] = useState(true)
   const [comments, setComments] = useState([])
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
   useEffect(() => {
-    fetch(`/api/posts/manage/${id}`, {
+    fetch(`${API_BASE_URL}/api/posts/manage/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => res.json())
@@ -19,7 +20,7 @@ const EditPost = ({ token }) => {
         setLoading(false)
       })
       .catch((err) => console.error(err))
-  }, [id, token])
+  }, [id, token, API_BASE_URL])
 
   const handleSubmit = (e) => {
     e.preventDefault()

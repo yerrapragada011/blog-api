@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 const PostManager = ({ token }) => {
   const [posts, setPosts] = useState([])
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
   useEffect(() => {
-    fetch('/api/posts/manage', {
+    fetch(`${API_BASE_URL}/api/posts/manage`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => res.json())
@@ -17,10 +18,10 @@ const PostManager = ({ token }) => {
         }
       })
       .catch((err) => console.error(err))
-  }, [token])
+  }, [token, API_BASE_URL])
 
   const togglePublish = (id) => {
-    fetch(`/api/posts/${id}/publish`, {
+    fetch(`${API_BASE_URL}/api/posts/${id}/publish`, {
       method: 'PATCH',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -35,7 +36,7 @@ const PostManager = ({ token }) => {
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
-      fetch(`/api/posts/${id}`, {
+      fetch(`${API_BASE_URL}/api/posts/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       })

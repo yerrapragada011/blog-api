@@ -8,13 +8,15 @@ const PostDetail = ({ token, user }) => {
   const [editMode, setEditMode] = useState(false)
   const [currentCommentId, setCurrentCommentId] = useState(null)
   const [editCommentContent, setEditCommentContent] = useState('')
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
+
 
   useEffect(() => {
-    fetch(`/api/posts/manage/${id}`)
+    fetch(`${API_BASE_URL}/api/posts/manage/${id}`)
       .then((res) => res.json())
       .then((data) => setPost(data))
       .catch((err) => console.error(err))
-  }, [id])
+  }, [id, API_BASE_URL])
 
   const handleSubmit = (e) => {
     e.preventDefault()
