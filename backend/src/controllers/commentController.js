@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 const addComment = async (req, res) => {
   const { content, postId } = req.body
-  const authorId = req.authorId
+  const authorId = req.user.userId
 
   try {
     const post = await prisma.post.findFirst({

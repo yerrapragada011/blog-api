@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import PostList from './components/PostList'
 import PostDetail from './components/PostDetail'
@@ -7,10 +7,25 @@ import Register from './components/Register'
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token') || '')
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    if (token) {
+      fetch('/api/auth/me', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then((res) => res.json())
+        .then((data) => setUser(data))
+        .catch((err) => console.error(err))
+    }
+  }, [token])
 
   const handleLogout = () => {
     localStorage.removeItem('token')
     setToken('')
+    setUser(null)
   }
 
   return (
@@ -18,6 +33,7 @@ function App() {
       <div>
         {token ? (
           <nav>
+            <span>{user ? `Welcome, ${user.username}` : 'Loading...'}</span>
             <button onClick={handleLogout}>Logout</button>
           </nav>
         ) : (

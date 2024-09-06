@@ -52,7 +52,7 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user.id, role: user.role },
+      { userId: user.id, username: user.username, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     )
@@ -63,4 +63,17 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { register, login }
+const currentUser = async (req, res) => {
+  const user = req.user
+  if (user) {
+    res.json({
+      id: user.id,
+      username: user.username,
+      email: user.email
+    })
+  } else {
+    res.status(404).json({ message: 'User not found' })
+  }
+}
+
+module.exports = { register, login, currentUser }
