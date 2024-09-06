@@ -11,7 +11,7 @@ const PostDetail = ({ token, user }) => {
 
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/posts/manage/${id}`)
+    fetch(`/api/posts/manage/${id}`)
       .then((res) => res.json())
       .then((data) => setPost(data))
       .catch((err) => console.error(err))
@@ -19,7 +19,7 @@ const PostDetail = ({ token, user }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`${process.env.REACT_APP_API_URL}/api/comments`, {
+    fetch(`/api/comments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const PostDetail = ({ token, user }) => {
   }
 
   const handleDelete = (commentId) => {
-    fetch(`${process.env.REACT_APP_API_URL}/api/posts/${id}/comments/${commentId}`, {
+    fetch(`/api/posts/${id}/comments/${commentId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
