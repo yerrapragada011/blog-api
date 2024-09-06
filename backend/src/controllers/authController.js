@@ -63,7 +63,7 @@ const login = async (req, res) => {
   }
 }
 
-const currentUser = async (req, res) => {
+const currentUser = (req, res) => {
   const user = req.user
   if (user) {
     res.json({

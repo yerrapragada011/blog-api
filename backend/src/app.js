@@ -3,11 +3,13 @@ const cors = require('cors')
 const authRoutes = require('./routes/authRoutes')
 const postRoutes = require('./routes/postRoutes')
 const commentRoutes = require('./routes/commentRoutes')
+const passport = require('./passport')
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(passport.initialize())
 
 app.use('/api/auth', authRoutes)
 app.use('/api/posts', postRoutes)
