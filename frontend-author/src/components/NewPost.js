@@ -9,7 +9,7 @@ const NewPost = ({ token }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`/api/posts`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/posts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

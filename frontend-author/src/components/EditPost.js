@@ -9,7 +9,7 @@ const EditPost = ({ token }) => {
   const [comments, setComments] = useState([])
 
   useEffect(() => {
-    fetch(`/api/posts/manage/${id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/posts/manage/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => res.json())
@@ -23,7 +23,7 @@ const EditPost = ({ token }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`/api/posts/manage/${id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/posts/manage/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const EditPost = ({ token }) => {
 
   const handleDeleteComment = (commentId) => {
     if (window.confirm('Are you sure you want to delete this comment?')) {
-      fetch(`/api/posts/${id}/comments/${commentId}`, {
+      fetch(`${process.env.REACT_APP_API_URL}/api/posts/${id}/comments/${commentId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       })

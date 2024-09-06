@@ -5,7 +5,7 @@ const PostList = () => {
   const [posts, setPosts] = useState([])
 
   useEffect(() => {
-    fetch(`/api/posts`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/posts`)
       .then((res) => res.json())
       .then((data) => setPosts(data))
       .catch((err) => console.error(err))

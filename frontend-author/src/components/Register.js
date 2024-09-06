@@ -12,7 +12,7 @@ const Register = ({ setToken }) => {
     e.preventDefault()
 
     try {
-      const res = await fetch(`/api/auth/register`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
