@@ -8,11 +8,10 @@ import Register from './components/Register'
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token') || '')
   const [user, setUser] = useState(null)
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
   useEffect(() => {
     if (token) {
-      fetch(`${API_BASE_URL}/api/auth/me`, {
+      fetch(`/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -24,7 +23,7 @@ function App() {
           setUser(null)
         })
     }
-  }, [token, API_BASE_URL])
+  }, [token])
 
   const handleLogout = () => {
     localStorage.removeItem('token')
