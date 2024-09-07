@@ -6,10 +6,11 @@ const NewPost = ({ token }) => {
   const [content, setContent] = useState('')
   const [published, setPublished] = useState(false)
   const navigate = useNavigate()
+  const apiUrl = process.env.REACT_APP_BACKEND_API_URL
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`/api/posts`, {
+    fetch(`${apiUrl}/api/posts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

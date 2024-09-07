@@ -8,18 +8,18 @@ const PostDetail = ({ token, user }) => {
   const [editMode, setEditMode] = useState(false)
   const [currentCommentId, setCurrentCommentId] = useState(null)
   const [editCommentContent, setEditCommentContent] = useState('')
-
+  const apiUrl = process.env.REACT_APP_BACKEND_API_URL
 
   useEffect(() => {
-    fetch(`/api/posts/manage/${id}`)
+    fetch(`${apiUrl}/api/posts/manage/${id}`)
       .then((res) => res.json())
       .then((data) => setPost(data))
       .catch((err) => console.error(err))
-  }, [id])
+  }, [id, apiUrl])
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`/api/comments`, {
+    fetch(`${apiUrl}/api/comments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const PostDetail = ({ token, user }) => {
   }
 
   const handleDelete = (commentId) => {
-    fetch(`/api/posts/${id}/comments/${commentId}`, {
+    fetch(`${apiUrl}/api/posts/${id}/comments/${commentId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ const PostDetail = ({ token, user }) => {
 
   const handleEditSubmit = (e) => {
     e.preventDefault()
-    fetch(`/api/posts/${id}/comments/${currentCommentId}`, {
+    fetch(`${apiUrl}/api/posts/${id}/comments/${currentCommentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

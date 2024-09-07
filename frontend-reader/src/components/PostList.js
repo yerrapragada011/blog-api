@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 
 const PostList = () => {
   const [posts, setPosts] = useState([])
+  const apiUrl = process.env.REACT_APP_BACKEND_API_URL
 
   useEffect(() => {
-    fetch(`/api/posts`)
+    fetch(`${apiUrl}/api/posts`)
       .then((res) => res.json())
       .then((data) => setPosts(data))
       .catch((err) => console.error(err))
-  }, [])
+  }, [apiUrl])
 
   return (
     <div>
