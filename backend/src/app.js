@@ -8,23 +8,15 @@ const passport = require('./passport')
 
 const app = express()
 
-const allowedOrigins = [
-  'https://blog-api-three-umber.vercel.app',
-  'https://blog-api-yr9v.vercel.app'
-]
-
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true)
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true)
-      } else {
-        return callback(new Error('Not allowed by CORS'))
-      }
-    }
+    origin: [
+      'https://blog-api-three-umber.vercel.app',
+      'https://blog-api-yr9v.vercel.app'
+    ]
   })
 )
+
 app.use(express.json())
 app.use(passport.initialize())
 
